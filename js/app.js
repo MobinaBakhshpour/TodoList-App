@@ -1,5 +1,6 @@
 let loacalStorageTODO = [];
 let getLoacalStorageTODO = [];
+let indexToDo ;
 let LocalStorageArrNumber = JSON.parse(localStorage.getItem('saveToDo'));
 let i = LocalStorageArrNumber.length;
 let inputContent = document.getElementById('itemInput');
@@ -31,6 +32,7 @@ function addNewTodo (event){
        let addDeleteBtn = document.createElement('button')
        addDeleteBtn.classList.add('btn-danger')
        addDeleteBtn.classList.add('btn')
+       addDeleteBtn.classList.add('DelBtn')
        addDeleteBtn.innerHTML = 'Delete'
        newLi.append(addDeleteBtn)
 
@@ -67,6 +69,7 @@ window.onload = function (){
        let addDeleteBtn = document.createElement('button')
        addDeleteBtn.classList.add('btn-danger')
        addDeleteBtn.classList.add('btn')
+       addDeleteBtn.classList.add('DelBtn')
        addDeleteBtn.innerHTML = 'Delete'
        newLi.append(addDeleteBtn)
 
@@ -76,3 +79,21 @@ window.onload = function (){
         });
     }
 }
+
+//Delete Button
+let delBtnElem = document.getElementsByClassName('btn-danger')
+document.addEventListener('click', function (event) {
+     if (event.target.classList.contains('DelBtn')) {
+        const todoToRemove = event.target.closest('.well');
+        const todoLbl = todoToRemove.children[0].innerHTML
+        indexToDo = getLoacalStorageTODO.findIndex(function (item){
+            return item == todoLbl
+        })
+        if (todoToRemove) {
+            todoToRemove.remove();
+            console.log(getLoacalStorageTODO)
+            getLoacalStorageTODO.splice(indexToDo,1)
+            localStorage.setItem('saveToDo' ,JSON.stringify(getLoacalStorageTODO));
+        }
+     }
+});
