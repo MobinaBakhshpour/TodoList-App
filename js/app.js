@@ -19,6 +19,7 @@ function addNewTodo (event){
         loacalStorageTODO.push(toDoObj)
         localStorage.setItem('saveToDo' ,JSON.stringify(loacalStorageTODO));
         GneratorToDo(loacalStorageTODO)
+        inputContent.focus()
     
     }
 }
@@ -42,6 +43,7 @@ function GneratorToDo(todoList){
        let addDeleteBtn = document.createElement('button')
        addDeleteBtn.className = "btn-danger btn DelBtn"
        addDeleteBtn.innerHTML = 'Delete'
+       addDeleteBtn.setAttribute('onclick','rmvTodo(' + todo.id +')')
        newLi.append(addDeleteBtn)
 
        UlElem.append(newLi)
@@ -66,22 +68,44 @@ window.onload = function (){
 }
 
 //Delete Button
+function rmvTodo(id){
+    loacalStorageTODO =JSON.parse(localStorage.getItem('saveToDo')) 
+    console.log(id)
+    indexToDo = loacalStorageTODO.findIndex(function (item){
+         return item.id === id
+    })
+     
+    loacalStorageTODO.splice(indexToDo,1)
+    localStorage.setItem('saveToDo' ,JSON.stringify(loacalStorageTODO))
+    GneratorToDo(loacalStorageTODO)
+
+    
+}
 let delBtnElem = document.getElementsByClassName('btn-danger')
-document.addEventListener('click', function (event) {
-     if (event.target.classList.contains('DelBtn')) {
-        const todoToRemove = event.target.closest('.well');
-        const todoLbl = todoToRemove.children[0].innerHTML
-        indexToDo = getLoacalStorageTODO.findIndex(function (item){
-            return item == todoLbl
-        })
-        console.log(getLoacalStorageTODO)
-        console.log(indexToDo)
-         if (todoToRemove) {
-        //     console.log(getLoacalStorageTODO)
-            getLoacalStorageTODO.splice(indexToDo,1)
-             console.log(getLoacalStorageTODO)
-             localStorage.setItem('saveToDo' ,JSON.stringify(getLoacalStorageTODO));
-            //todoToRemove.remove();
-        }
-     }
-});
+// document.addEventListener('click', function (event) {
+//      if (event.target.classList.contains('DelBtn')) {
+//         const todoToRemove = event.target.closest('.well');
+//         const todoLbl = todoToRemove.children[0].innerHTML
+//         indexToDo = getLoacalStorageTODO.findIndex(function (item){
+//             return item == todoLbl
+//         })
+//         console.log(getLoacalStorageTODO)
+//         console.log(indexToDo)
+//          if (todoToRemove) {
+//         //     console.log(getLoacalStorageTODO)
+//             getLoacalStorageTODO.splice(indexToDo,1)
+//              console.log(getLoacalStorageTODO)
+//              localStorage.setItem('saveToDo' ,JSON.stringify(getLoacalStorageTODO));
+//             //todoToRemove.remove();
+//         }
+//      }
+// });
+
+
+//Clear TODO List
+let clearTodoListBtn = document.getElementById('clearButton')
+clearTodoListBtn.addEventListener('click', function(){
+    loacalStorageTODO = []
+    localStorage.clear()
+    GneratorToDo(loacalStorageTODO)
+})
