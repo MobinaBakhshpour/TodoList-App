@@ -1,83 +1,68 @@
 let loacalStorageTODO = [];
 let getLoacalStorageTODO = [];
 let indexToDo ;
-let LocalStorageArrNumber = JSON.parse(localStorage.getItem('saveToDo'));
-let i = LocalStorageArrNumber.length;
+let UlElem = document.getElementById('todoList');
+let  LocalStorageArrNumber = JSON.parse(localStorage.getItem('saveToDo'));
 let inputContent = document.getElementById('itemInput');
 let addBtnElem = document.getElementById('addButton');
+
 inputContent.addEventListener('keypress',  addNewTodo)
 addBtnElem.addEventListener('click',  addNewTodo)
 
 function addNewTodo (event){
     if(event.key === "Enter" || event.type ==="click"){
-        loacalStorageTODO[i] =inputContent.value;
-        i++;
-         localStorage.setItem('saveToDo' ,JSON.stringify(loacalStorageTODO));
-
-
-       let newLi = document.createElement('li')
-       newLi.classList.add('completed')
-       newLi.classList.add('well')
-
-       let addToDoLable = document.createElement('label')
-       addToDoLable.innerHTML = inputContent.value;
-       newLi.append(addToDoLable)
-
-       let addCompleteBtn = document.createElement('button')
-       addCompleteBtn.classList.add('btn-success')
-       addCompleteBtn.classList.add('btn')
-       addCompleteBtn.innerHTML = 'Complete'
-       newLi.append(addCompleteBtn)
-
-       let addDeleteBtn = document.createElement('button')
-       addDeleteBtn.classList.add('btn-danger')
-       addDeleteBtn.classList.add('btn')
-       addDeleteBtn.classList.add('DelBtn')
-       addDeleteBtn.innerHTML = 'Delete'
-       newLi.append(addDeleteBtn)
-
-
-       let UlElem = document.getElementById('todoList')
-       UlElem.append(newLi)
-
-       inputContent.value= ""
+        let toDoObj = {
+            id: loacalStorageTODO.length+1 ,
+            content : inputContent.value ,
+            complete :false,
+        }
+        loacalStorageTODO.push(toDoObj)
+        localStorage.setItem('saveToDo' ,JSON.stringify(loacalStorageTODO));
+        GneratorToDo(loacalStorageTODO)
     
     }
 }
 
-window.onload = function (){
-    getLoacalStorageTODO = JSON.parse(localStorage.getItem('saveToDo'))
-    
-    
-    if( getLoacalStorageTODO.length != 0){
-       getLoacalStorageTODO.forEach( function (item) {
 
+function GneratorToDo(todoList){
+    UlElem.innerHTML = ' '
+    todoList.forEach(function(todo){
        let newLi = document.createElement('li')
-       newLi.classList.add('completed')
-       newLi.classList.add('well')
+       newLi.className = "completed well"
 
        let addToDoLable = document.createElement('label')
-       addToDoLable.innerHTML = item;
+       addToDoLable.innerHTML = todo.content
        newLi.append(addToDoLable)
 
        let addCompleteBtn = document.createElement('button')
-       addCompleteBtn.classList.add('btn-success')
-       addCompleteBtn.classList.add('btn')
-       addCompleteBtn.innerHTML = 'Complete'
+       addCompleteBtn.className = 'btn-success btn'
+       addCompleteBtn.innerHTML = todo.complete ? 'UnComleted' : 'Complete'
        newLi.append(addCompleteBtn)
 
        let addDeleteBtn = document.createElement('button')
-       addDeleteBtn.classList.add('btn-danger')
-       addDeleteBtn.classList.add('btn')
-       addDeleteBtn.classList.add('DelBtn')
+       addDeleteBtn.className = "btn-danger btn DelBtn"
        addDeleteBtn.innerHTML = 'Delete'
        newLi.append(addDeleteBtn)
 
-
-       let UlElem = document.getElementById('todoList')
        UlElem.append(newLi)
-        });
+
+       inputContent.value= ""
+    })
+    
+}
+
+
+window.onload = function (){
+    getLoacalStorageTODO = JSON.parse(localStorage.getItem('saveToDo'))
+    
+    if(getLoacalStorageTODO){
+        loacalStorageTODO = getLoacalStorageTODO
+    } else {
+        console.log('TODO empty')
+        loacalStorageTODO = []
     }
+
+    GneratorToDo(loacalStorageTODO)
 }
 
 //Delete Button
@@ -89,11 +74,14 @@ document.addEventListener('click', function (event) {
         indexToDo = getLoacalStorageTODO.findIndex(function (item){
             return item == todoLbl
         })
-        if (todoToRemove) {
-            todoToRemove.remove();
-            console.log(getLoacalStorageTODO)
+        console.log(getLoacalStorageTODO)
+        console.log(indexToDo)
+         if (todoToRemove) {
+        //     console.log(getLoacalStorageTODO)
             getLoacalStorageTODO.splice(indexToDo,1)
-            localStorage.setItem('saveToDo' ,JSON.stringify(getLoacalStorageTODO));
+             console.log(getLoacalStorageTODO)
+             localStorage.setItem('saveToDo' ,JSON.stringify(getLoacalStorageTODO));
+            //todoToRemove.remove();
         }
      }
 });
