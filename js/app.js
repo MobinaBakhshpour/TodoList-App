@@ -29,7 +29,7 @@ function GneratorToDo(todoList){
     UlElem.innerHTML = ' '
     todoList.forEach(function(todo){
        let newLi = document.createElement('li')
-       newLi.className = "completed well"
+       newLi.className = "well"
 
        let addToDoLable = document.createElement('label')
        addToDoLable.innerHTML = todo.content
@@ -37,7 +37,10 @@ function GneratorToDo(todoList){
 
        let addCompleteBtn = document.createElement('button')
        addCompleteBtn.className = 'btn-success btn'
+       addCompleteBtn.setAttribute('onclick', 'changeMoode('+ todo.id +')')
        addCompleteBtn.innerHTML = todo.complete ? 'UnComleted' : 'Complete'
+       newLi.classList.add (todo.complete ? 'uncompleted' : 'completed') 
+
        newLi.append(addCompleteBtn)
 
        let addDeleteBtn = document.createElement('button')
@@ -78,28 +81,9 @@ function rmvTodo(id){
     loacalStorageTODO.splice(indexToDo,1)
     localStorage.setItem('saveToDo' ,JSON.stringify(loacalStorageTODO))
     GneratorToDo(loacalStorageTODO)
-
     
+
 }
-let delBtnElem = document.getElementsByClassName('btn-danger')
-// document.addEventListener('click', function (event) {
-//      if (event.target.classList.contains('DelBtn')) {
-//         const todoToRemove = event.target.closest('.well');
-//         const todoLbl = todoToRemove.children[0].innerHTML
-//         indexToDo = getLoacalStorageTODO.findIndex(function (item){
-//             return item == todoLbl
-//         })
-//         console.log(getLoacalStorageTODO)
-//         console.log(indexToDo)
-//          if (todoToRemove) {
-//         //     console.log(getLoacalStorageTODO)
-//             getLoacalStorageTODO.splice(indexToDo,1)
-//              console.log(getLoacalStorageTODO)
-//              localStorage.setItem('saveToDo' ,JSON.stringify(getLoacalStorageTODO));
-//             //todoToRemove.remove();
-//         }
-//      }
-// });
 
 
 //Clear TODO List
@@ -109,3 +93,23 @@ clearTodoListBtn.addEventListener('click', function(){
     localStorage.clear()
     GneratorToDo(loacalStorageTODO)
 })
+
+
+//Change Complete or Un Complete
+function changeMoode(id){
+    loacalStorageTODO =JSON.parse(localStorage.getItem('saveToDo')) 
+    let indexToDoComplet = loacalStorageTODO.findIndex(function (item){
+        return item.id === id
+   })
+    console.log(indexToDoComplet)
+    console.log(loacalStorageTODO[indexToDoComplet])
+    if(loacalStorageTODO[indexToDoComplet].complete === false){
+        loacalStorageTODO[indexToDoComplet].complete = true;
+    }else{
+        loacalStorageTODO[indexToDoComplet].complete = false;
+    }
+    localStorage.setItem('saveToDo' ,JSON.stringify(loacalStorageTODO))
+    GneratorToDo(loacalStorageTODO)
+
+ 
+}
