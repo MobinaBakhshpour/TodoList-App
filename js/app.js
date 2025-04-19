@@ -21,6 +21,7 @@ function addNewTodo(event) {
     localStorage.setItem("saveToDo", JSON.stringify(loacalStorageTODO));
     GneratorToDo(loacalStorageTODO);
     inputContent.focus();
+    if (loacalStorageTODO.length > 0) clearButton.style.display = "inline-block";
   }
 }
 
@@ -65,6 +66,8 @@ window.onload = function () {
   }
 
   GneratorToDo(loacalStorageTODO);
+  loacalStorageTODO.length > 0 ? clearButton.style.display = "inline-block" : clearButton.style.display = "none";
+
 };
 
 //Delete Button
@@ -117,13 +120,3 @@ function changeMoode(id) {
   localStorage.setItem("saveToDo", JSON.stringify(loacalStorageTODO));
   GneratorToDo(loacalStorageTODO);
 }
-
-window.addEventListener("click", () => {
-  console.log(loacalStorageTODO.length);
-  if (loacalStorageTODO.length > 0) clearButton.style.display = "inline-block";
-});
-
-window.addEventListener("keypress", () => {
-  console.log(loacalStorageTODO.length);
-  if (loacalStorageTODO.length > 0) clearButton.style.display = "inline-block";
-});
